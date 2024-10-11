@@ -60,19 +60,18 @@ const displayRamens = () => {
   fetch("http://localhost:3000/ramens")
     .then((res) => res.json())
     .then((data) => {
-      data
-        .forEach((imgArr) => {
-          let imgTag = document.createElement("img");
-          imgTag.src = imgArr.image;
-          imgTag.addEventListener("click", () => {
-            handleClick(imgArr);
-          });
-          ramenDivImg.appendChild(imgTag);
-        })
-        .catch((error) =>
-          console.log("Unable to get the ramens from the server", error)
-        );
-    });
+      data.forEach((imgArr) => {
+        let imgTag = document.createElement("img");
+        imgTag.src = imgArr.image;
+        imgTag.addEventListener("click", () => {
+          handleClick(imgArr);
+        });
+        ramenDivImg.appendChild(imgTag);
+      });
+    })
+    .catch((error) =>
+      console.log("Unable to get the ramens from the server", error)
+    );
 };
 
 const main = () => {
