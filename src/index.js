@@ -55,7 +55,6 @@ const addSubmitListener = () => {
 
   editRamenForm.addEventListener("submit", (e) => {
     e.preventDefault();
-
     editRamen(currentRamenObj);
   });
 };
