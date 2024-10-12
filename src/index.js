@@ -9,18 +9,21 @@ let detailName = document.querySelector(".name");
 let detailRestaurant = document.querySelector(".restaurant");
 let detailRating = document.querySelector("#rating-display");
 let detailComment = document.querySelector("#comment-display");
+
+//updte rating and comment
+let editRamenForm = document.querySelector("#edit-ramen");
+let editRamenRating = document.querySelector("#new-rating-edit");
+let editRamenComment = document.querySelector("#new-comment-edit");
+let currentRamenObj = null;
+
 // Callbacks
 const handleClick = (ramen) => {
-  console.log(ramen);
-
+  currentRamenObj = ramen;
   detailImage.src = ramen.image;
   detailName.textContent = ramen.name;
   detailRestaurant.textContent = ramen.restaurant;
   detailComment.textContent = ramen.comment;
   detailRating.textContent = ramen.rating;
-  // ramenDetail.appendChild(detailImage, detailName, detailRestaurant);
-  // ramenRatingParagraph.appendChild(detailRating);
-  // ramenCommentParagraph.appendChild(detailComment);
 
   // Add code
 };
@@ -29,7 +32,7 @@ const addSubmitListener = () => {
   // Add code
   ramenForm.addEventListener("submit", (e) => {
     e.preventDefault();
-    console.log(e.target);
+
     let ramenObj = {
       name: document.querySelector("#new-name").value,
       restaurant: document.querySelector("#new-restaurant").value,
@@ -37,7 +40,6 @@ const addSubmitListener = () => {
       rating: document.querySelector("#new-rating").value,
       comment: document.querySelector("#new-comment").value,
     };
-    console.log(ramenObj);
     fetch("http://localhost:3000/ramens", {
       method: "POST",
       headers: {
@@ -45,14 +47,31 @@ const addSubmitListener = () => {
       },
       body: JSON.stringify(ramenObj),
     })
-      .then((res) => {
-        res.json();
+      .then((res) => res.json())
+      .then((data) => {
         handleClick(ramenObj);
+        console.log(data);
       })
-      .then((data) => console.log(data))
       .catch((error) => console.log("Unable to Send data", error));
   });
+
+  editRamenForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    editRamen(currentRamenObj);
+  });
 };
+function editRamen(editRamenObj) {
+  // console.log(editRamenObj);
+
+  // console.log(editRamenComment);
+  // console.log(editRamenRating);
+  editRamenObj.comment = editRamenComment.value;
+  editRamenObj.rating = editRamenRating.value;
+
+  detailComment.textContent = editRamenObj.comment;
+  detailRating.textContent = editRamenObj.rating;
+}
 
 const displayRamens = () => {
   // Add code
@@ -60,15 +79,15 @@ const displayRamens = () => {
   fetch("http://localhost:3000/ramens")
     .then((res) => res.json())
     .then((data) => {
-      data.forEach((imgArr, index) => {
+      data.forEach((Obj, index) => {
         let imgTag = document.createElement("img");
-        imgTag.src = imgArr.image;
+        imgTag.src = Obj.image;
         imgTag.addEventListener("click", () => {
-          handleClick(imgArr);
+          handleClick(Obj);
         });
-        // handleClick(imgArr.image[0]);
+        // handleClick(Obj.image[0]);
         if (index === 0) {
-          handleClick(imgArr);
+          handleClick(Obj);
         }
 
         ramenDivImg.appendChild(imgTag);
