@@ -1,8 +1,6 @@
 // index.js
 let ramenDivImg = document.querySelector("#ramen-menu");
-// let ramenDetail = document.querySelector("#ramen-detail");
-// let ramenRatingParagraph = document.querySelector("p#rating-display");
-// let ramenCommentParagraph = document.querySelector("p#comment-display");
+
 let ramenForm = document.querySelector("#new-ramen");
 let detailImage = document.querySelector(".detail-image");
 let detailName = document.querySelector(".name");
@@ -62,12 +60,18 @@ const addSubmitListener = () => {
   });
 };
 function editRamen(editRamenObj) {
-  // console.log(editRamenObj);
-
-  // console.log(editRamenComment);
-  // console.log(editRamenRating);
   editRamenObj.comment = editRamenComment.value;
   editRamenObj.rating = editRamenRating.value;
+  fetch(`http://localhost:3000/ramens/${editRamenObj.id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "Application/json",
+    },
+    body: JSON.stringify(editRamenObj),
+  })
+    .then((res) => res.json())
+    .then((data) => console.log(data))
+    .catch((error) => console.log("error updating", error));
 
   detailComment.textContent = editRamenObj.comment;
   detailRating.textContent = editRamenObj.rating;
@@ -82,6 +86,13 @@ const displayRamens = () => {
       data.forEach((Obj, index) => {
         let imgTag = document.createElement("img");
         imgTag.src = Obj.image;
+
+        let deleteBtn = document.createElement("button");
+        deleteBtn.textContent = "Remove";
+        deleteBtn.addEventListener("click", () => {
+          deleteRamen(Obj);
+          imgTag.remove();
+        });
         imgTag.addEventListener("click", () => {
           handleClick(Obj);
         });
@@ -91,12 +102,23 @@ const displayRamens = () => {
         }
 
         ramenDivImg.appendChild(imgTag);
+        ramenDivImg.appendChild(deleteBtn);
       });
     })
     .catch((error) =>
       console.log("Unable to get the ramens from the server", error)
     );
 };
+
+function deleteRamen(anyObj) {
+  if (currentRamenObj) {
+    detailImage.src = "";
+    detailName.textContent = "";
+    detailRestaurant.textContent = "";
+    detailRating.textContent = "";
+    detailComment.textContent = "";
+  }
+}
 
 const main = () => {
   // Invoke displayRamens here
