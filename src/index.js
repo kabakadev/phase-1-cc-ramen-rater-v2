@@ -4,15 +4,15 @@ let ramenDivImg = document.querySelector("#ramen-menu");
 // let ramenRatingParagraph = document.querySelector("p#rating-display");
 // let ramenCommentParagraph = document.querySelector("p#comment-display");
 let ramenForm = document.querySelector("#new-ramen");
-
+let detailImage = document.querySelector(".detail-image");
+let detailName = document.querySelector(".name");
+let detailRestaurant = document.querySelector(".restaurant");
+let detailRating = document.querySelector("#rating-display");
+let detailComment = document.querySelector("#comment-display");
 // Callbacks
 const handleClick = (ramen) => {
   console.log(ramen);
-  let detailImage = document.querySelector(".detail-image");
-  let detailName = document.querySelector(".name");
-  let detailRestaurant = document.querySelector(".restaurant");
-  let detailRating = document.querySelector("#rating-display");
-  let detailComment = document.querySelector("#comment-display");
+
   detailImage.src = ramen.image;
   detailName.textContent = ramen.name;
   detailRestaurant.textContent = ramen.restaurant;
@@ -60,12 +60,17 @@ const displayRamens = () => {
   fetch("http://localhost:3000/ramens")
     .then((res) => res.json())
     .then((data) => {
-      data.forEach((imgArr) => {
+      data.forEach((imgArr, index) => {
         let imgTag = document.createElement("img");
         imgTag.src = imgArr.image;
         imgTag.addEventListener("click", () => {
           handleClick(imgArr);
         });
+        // handleClick(imgArr.image[0]);
+        if (index === 0) {
+          handleClick(imgArr);
+        }
+
         ramenDivImg.appendChild(imgTag);
       });
     })
