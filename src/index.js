@@ -72,8 +72,8 @@ function editRamen(editRamenObj) {
     .then((data) => console.log(data))
     .catch((error) => console.log("error updating", error));
 
-  detailComment.textContent = editRamenObj.comment;
-  detailRating.textContent = editRamenObj.rating;
+  // detailComment.textContent = editRamenObj.comment;
+  // detailRating.textContent = editRamenObj.rating;
 }
 
 const displayRamens = () => {
@@ -85,23 +85,23 @@ const displayRamens = () => {
       data.forEach((Obj, index) => {
         let imgTag = document.createElement("img");
         imgTag.src = Obj.image;
-
+        let div = document.createElement("div");
         let deleteBtn = document.createElement("button");
         deleteBtn.textContent = "Remove";
         deleteBtn.addEventListener("click", () => {
           deleteRamen(Obj);
           imgTag.remove();
+          div.remove();
         });
         imgTag.addEventListener("click", () => {
           handleClick(Obj);
         });
-        // handleClick(Obj.image[0]);
         if (index === 0) {
           handleClick(Obj);
         }
-
+        div.appendChild(deleteBtn);
         ramenDivImg.appendChild(imgTag);
-        ramenDivImg.appendChild(deleteBtn);
+        ramenDivImg.appendChild(div);
       });
     })
     .catch((error) =>
