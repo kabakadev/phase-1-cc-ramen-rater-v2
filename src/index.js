@@ -72,8 +72,8 @@ function editRamen(editRamenObj) {
     .then((data) => console.log(data))
     .catch((error) => console.log("error updating", error));
 
-  // detailComment.textContent = editRamenObj.comment;
-  // detailRating.textContent = editRamenObj.rating;
+  detailComment.textContent = editRamenObj.comment;
+  detailRating.textContent = editRamenObj.rating;
 }
 
 const displayRamens = () => {
